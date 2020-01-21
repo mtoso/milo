@@ -27,7 +27,7 @@ enum State {
     Destroyed = "Destroyed",
 };
 
-class NrdpTCPNetworkPipe implements NetworkPipe {
+class NodeTCPNetworkPipe implements NetworkPipe {
     private sock?: net.Socket;
     private bufferPool: Buffer[];
     private bufferIdx: number;
@@ -37,7 +37,10 @@ class NrdpTCPNetworkPipe implements NetworkPipe {
     public onclose?: OnClose;
     public onerror?: OnError;
 
-    public connection: Promise<NrdpTCPNetworkPipe>;
+    // FIXME
+    public readonly closed: boolean = false;
+
+    public connection: Promise<NodeTCPNetworkPipe>;
 
     constructor(host: string, port: number, onConnect?: () => void) {
         this.bufferIdx = 0;
@@ -158,7 +161,7 @@ export default function createTCPNetworkPipe(options: CreateTCPNetworkPipeOption
     console.log("Crea,ting TCP Network Pipe");
     return new Promise((res, rej) => {
         console.log("new Promise Crea,ting TCP Network Pipe");
-        const pipe = new NrdpTCPNetworkPipe(options.host, options.port);
+        const pipe = new NodeTCPNetworkPipe(options.host, options.port);
         pipe.connection.then(res).catch(rej);
     });
 };
