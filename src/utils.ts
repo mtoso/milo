@@ -1,5 +1,3 @@
-import Platform from "./Platform";
-
 export function headerValue(headers: string[], header: string): string
 {
     const lower = header.toLowerCase() + ": ";
@@ -15,6 +13,12 @@ export function headerValue(headers: string[], header: string): string
 export function assert(condition: any, msg?: string): asserts condition
 {
     if (!condition) {
-        Platform.assert(condition, msg);
+        // @ts-ignore
+        if (typeof nrdp !== 'undefined') {
+            // @ts-ignore
+            nrdp.assert(condition, msg);
+        } else {
+            // node
+        }
     }
 }
